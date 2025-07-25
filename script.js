@@ -9,3 +9,30 @@
 // - Quando um jogador ganhar seu nome deve ser mostrado na tela e as regiões da vitória devem ser destacadas de alguma forma;
 // - Em caso de empate, uma mensagem de empate deve ser mostrada na tela;
 // - Deve ser possível reiniciar o jogo para jogar novamente.
+
+const boardRegions = document.querySelectorAll('#gameBoard span')
+let vBoard = []
+let turnPlayer = ''
+const player1 = document.getElementById('player1')
+const player2 = document.getElementById('player2')
+const startButton = document.getElementById('start')
+startButton.addEventListener('click', initializeGame)
+
+function initializeGame(){
+  const namePlayer1 = player1.value + " - X"
+  const namePlayer2 = player2.value + " - 0"
+  turnPlayer = namePlayer1
+
+  let currentTurn = document.getElementById('turnPlayer')
+  currentTurn.innerText = turnPlayer
+  
+  vBoard = ['', '', '', '', '', '', '', '', '']
+  document.querySelectorAll('.cursor-pointer').forEach(function (boardRegions){
+    boardRegions.addEventListener('click', function(){
+      if (turnPlayer === namePlayer1){
+        const play = boardRegions.dataset.region
+        boardRegions.textContent = 'X'
+      }
+    })
+  })
+}
