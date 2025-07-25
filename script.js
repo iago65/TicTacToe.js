@@ -27,11 +27,30 @@ function initializeGame(){
   currentTurn.innerText = turnPlayer
   
   vBoard = ['', '', '', '', '', '', '', '', '']
+
+  //? Converter valor da jogada tipo 1.2 para um valor único na posição do array
+  function convertPlay(simbol, playValue){
+    let convertArrayBoard = playValue.split('.')
+    let linha = parseInt(convertArrayBoard[0])
+    let coluna = parseInt(convertArrayBoard[1])
+    let indice = linha * 3 + coluna
+    vBoard[indice] = simbol
+  }
+
   document.querySelectorAll('.cursor-pointer').forEach(function (boardRegions){
     boardRegions.addEventListener('click', function(){
       if (turnPlayer === namePlayer1){
         const play = boardRegions.dataset.region
         boardRegions.textContent = 'X'
+        convertPlay('X', play)
+        turnPlayer = namePlayer2
+        currentTurn.innerText = turnPlayer
+      } else if (turnPlayer === namePlayer2){
+          const play = boardRegions.dataset.region
+          boardRegions.textContent = 'O'
+          convertPlay('O', play)
+          turnPlayer = namePlayer1
+          currentTurn.innerText = turnPlayer
       }
     })
   })
