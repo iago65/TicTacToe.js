@@ -13,10 +13,16 @@
 <body>
   <h1>TicTacToe.JS</h1>
   <hr>
-  <label for="player1">X</label>
-  <input type="text" id="player1" placeholder="Nome do Jogador 1">
-  <label for="player2">O</label>
-  <input type="text" id="player2" placeholder="Nome do Jogador 2">
+  <div class="player-inputs">
+    <div class="player-group">
+      <label for="player1">X</label>
+      <input type="text" id="player1" placeholder="Nome do Jogador 1">
+    </div>
+    <div class="player-group">
+      <label for="player2">O</label>
+      <input type="text" id="player2" placeholder="Nome do Jogador 2">
+    </div>
+  </div>
   <button id="start">Começar!</button>
   <h2>Vez de: <span id="turnPlayer"></span></h2> 
   <section id="gameBoard">

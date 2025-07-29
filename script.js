@@ -21,8 +21,13 @@ startButton.addEventListener('click', initializeGame)
 
 
 function initializeGame(){
-  const namePlayer1 = player1.value + " - X"
-  const namePlayer2 = player2.value + " - 0"
+  if (player1.value.trim() === '' || player2.value.trim() === '') {
+    alert('Por favor, preencha os nomes dos dois jogadores!');
+    return;
+  }
+  
+  const namePlayer1 = player1.value.trim() + " - X"
+  const namePlayer2 = player2.value.trim() + " - O"
   turnPlayer = namePlayer1
 
   let currentTurn = document.getElementById('turnPlayer')
@@ -40,25 +45,12 @@ function initializeGame(){
   }
 
   function restartGame(){
-    turnPlayer = namePlayer1
-
-    let currentTurn = document.getElementById('turnPlayer')
-    currentTurn.innerText = turnPlayer
-
-    currentTurn.classList.add('hidden')
-    
-    vBoard = ['', '', '', '', '', '', '', '', '']
-    for(i = 0; i < vBoard.length; i++){
-      boardRegions[i].innerText = ''
-      boardRegions[i].classList.remove('winning', 'X', 'O')
-    }
-    currentTurn.classList.remove('hidden')
-    initializeGame()
+    location.reload()
   }
 
   function checkWin() {
     const namePlayer1 = player1.value + " - X"
-    const namePlayer2 = player2.value + " - 0"
+    const namePlayer2 = player2.value + " - O"
 
     const winningRows = [[0, 1, 2], [3, 4, 5] , [6, 7 , 8]]
     const winningColumns = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
@@ -76,7 +68,7 @@ function initializeGame(){
         setTimeout(function() {
           const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
           if (confirmRestart){restartGame()}
-        }, 1750)
+        }, 2000)
       } else if (vBoard[winningRows[i][0]] === 'O' && vBoard[winningRows[i][1]] === 'O' && vBoard[winningRows[i][2]] === 'O'){
         boardRegions[winningRows[i][0]].classList.add('winning')
         boardRegions[winningRows[i][1]].classList.add('winning')   
@@ -87,7 +79,7 @@ function initializeGame(){
         setTimeout(function() {
           const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
           if (confirmRestart){restartGame()}
-        }, 1750)
+        }, 2000)
       }
     }
 
@@ -104,7 +96,7 @@ function initializeGame(){
         setTimeout(function() {
           const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
           if (confirmRestart){restartGame()}
-        }, 1750)
+        }, 2000)
       } else if(vBoard[winningColumns[i][0]] === 'O' && vBoard[winningColumns[i][1]] === 'O' && vBoard[winningColumns[i][2]] === 'O'){
         boardRegions[winningColumns[i][0]].classList.add('winning')
         boardRegions[winningColumns[i][1]].classList.add('winning')
@@ -116,7 +108,7 @@ function initializeGame(){
         setTimeout(function() {
           const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
           if (confirmRestart){restartGame()}
-        }, 1750)
+        }, 2000)
       }
     }
 
@@ -133,7 +125,7 @@ function initializeGame(){
         setTimeout(function() {
           const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
           if (confirmRestart){restartGame()}
-        }, 1750)
+        }, 2000)
       }else if(vBoard[winningDiagonal[i][0]] === 'O' && vBoard[winningDiagonal[i][1]] === 'O' &&    vBoard[winningDiagonal[i][2]] === 'O'){
           boardRegions[winningDiagonal[i][0]].classList.add('winning')
           boardRegions[winningDiagonal[i][1]].classList.add('winning')
@@ -145,22 +137,39 @@ function initializeGame(){
           setTimeout(function() {
             const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
             if (confirmRestart){restartGame()}
-          }, 1750)
+          }, 2000)
       }
     }
 
     //? Empate
+    let contador = 0
     for(i = 0; i < vBoard.length; i++){
-      let contador 
-      if(vBoard[i] !== ''){}
+      if(vBoard[i] !== ''){
+        contador ++
+        if(contador === 9){
+          gameResult.innerText = 'O jogo terminou em um empate!'
+          gameResult.classList.remove('hidden')
+          
+          setTimeout(function() {
+            const confirmRestart = confirm('O jogo acabou, deseja reiniciar?')
+            if (confirmRestart){restartGame()}
+          }, 2000)
+        }
+      }
     }
   }
 
   document.querySelectorAll('.cursor-pointer').forEach(function (boardRegions){
     boardRegions.addEventListener('click', function(){
+      if (boardRegions.textContent !== '') {
+        return;
+      }
+      
       if (turnPlayer === namePlayer1){
         const play = boardRegions.dataset.region
         boardRegions.textContent = 'X'
+        boardRegions.classList.add('X')
+        boardRegions.classList.add('disabled') 
         convertPlay('X', play)
         checkWin()
         turnPlayer = namePlayer2
@@ -168,6 +177,8 @@ function initializeGame(){
       } else if (turnPlayer === namePlayer2){
           const play = boardRegions.dataset.region
           boardRegions.textContent = 'O'
+          boardRegions.classList.add('O')
+          boardRegions.classList.add('disabled')
           convertPlay('O', play)
           checkWin()
           turnPlayer = namePlayer1
